@@ -20,7 +20,7 @@ spec:
       containers:
       - name: apigateway-springboot
         image: 192.168.20.222:8443/digitalbiohumans/poc/apigateway-springboot:0.0.2-SNAPSHOT
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - name: port-tcp
           containerPort: 8082
