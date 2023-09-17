@@ -18,7 +18,7 @@ spec:
         app: apigateway-springboot
     spec:
       containers:
-      - name: apigateway-springboot9
+      - name: apigateway-springboot
         image: 192.168.20.222:8443/digitalbiohumans/poc/apigateway-springboot:0.0.10-SNAPSHOT
         imagePullPolicy: Always
         env:
