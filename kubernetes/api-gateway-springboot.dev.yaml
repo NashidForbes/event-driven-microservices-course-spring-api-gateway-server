@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: apigateway-springboot
-        image: 192.168.20.222:8443/digitalbiohumans/poc/apigateway-springboot:0.0.12-spring-cloud-config-secure-client-SNAPSHOT
+        image: 192.168.20.222:8443/digitalbiohumans/poc/apigateway-springboot:0.0.12.1-spring-cloud-config-secure-client-SNAPSHOT
         imagePullPolicy: Always
         env:
           - name: SPRING_PROFILES_ACTIVE
