@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: apigateway-springboot
-        image: 192.168.20.222:8443/digitalbiohumans/poc/apigateway-springboot:0.0.12.1-spring-cloud-config-secure-client-SNAPSHOT
+        image: ${NEXUS_REPO_HOST}/digitalbiohumans/poc/apigateway-springboot:0.0.12.1-spring-cloud-config-secure-client-SNAPSHOT
         imagePullPolicy: Always
         env:
           - name: SPRING_PROFILES_ACTIVE
@@ -52,8 +52,8 @@ spec:
     port: 8082
     targetPort: 8082
   clusterIP: 10.152.183.125
-  externalIPs:
-    - "192.168.20.23"
+  #  externalIPs:
+  #    - "192.168.20.23"
   selector:
     app: apigateway-springboot
 ---
