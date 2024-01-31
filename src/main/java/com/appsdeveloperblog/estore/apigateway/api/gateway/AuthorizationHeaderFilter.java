@@ -2,6 +2,7 @@ package com.appsdeveloperblog.estore.apigateway.api.gateway;
 
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -16,6 +17,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 @Component
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
@@ -33,6 +35,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
     @Override
     public GatewayFilter apply(Config config) {
+        // can read http object details from exchange
         return (exchange, chain) -> {
 
             ServerHttpRequest request = exchange.getRequest();
@@ -66,9 +69,10 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
         try {
             byte[] secretKeyBytes = env.getProperty("token.secret").getBytes();
-            SecretKey key = Keys.hmacShaKeyFor(secretKeyBytes);
+            SecretKey signingKey = new SecretKeySpec(secretKeyBytes, SignatureAlgorithm.HS512.getJcaName());
             JwtParser parser = Jwts.parser()
-                    .verifyWith(key)
+                    .setSigningKey(signingKey)
+                    .verifyWith(signingKey)
                     .build();
             subject = parser.parseSignedClaims(jwt).getPayload().getSubject();
         } catch (Exception ex) {
