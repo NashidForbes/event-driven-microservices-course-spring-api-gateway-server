@@ -39,6 +39,7 @@ public class MyPreFilter implements GlobalFilter, Ordered {
         return chain.filter(exchange);
     }
 
+    // Since this is a Pre-filter it will be executed first "index 0"
     @Override
     public int getOrder() {
 

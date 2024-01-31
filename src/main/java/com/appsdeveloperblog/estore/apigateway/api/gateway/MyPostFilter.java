@@ -24,6 +24,7 @@ public class MyPostFilter implements GlobalFilter, Ordered {
         }));
     }
 
+    // Since this is a Post-filter it will be executed last "index 0"
     @Override
     public int getOrder() {
         return 0;
