@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 
 @Component
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
@@ -68,13 +69,13 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         String subject = null;
 
         try {
-            byte[] secretKeyBytes = env.getProperty("token.secret").getBytes();
-            SecretKey signingKey = new SecretKeySpec(secretKeyBytes, SignatureAlgorithm.HS512.getJcaName());
+            byte[] secretKeyBytes = Base64.getEncoder().encode(env.getProperty("token.secret").getBytes());
+            SecretKey key = Keys.hmacShaKeyFor(secretKeyBytes);
             JwtParser parser = Jwts.parser()
-                    .setSigningKey(signingKey)
-                    .verifyWith(signingKey)
+                    .verifyWith(key)
                     .build();
-            subject = parser.parseSignedClaims(jwt).getPayload().getSubject();
+           String subjectValue = parser.parseSignedClaims(jwt).getPayload().getSubject().toString();
+           subject = subjectValue;
         } catch (Exception ex) {
             returnValue = false;
         }
